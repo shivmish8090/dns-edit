@@ -1,0 +1,39 @@
+{
+  "name": "Edit",
+  "description": "A Telegram bot to handle edited messages and media",
+  "repository": "https://github.com/Rajputshivsingh65/Edit",
+  "keywords": ["telegram", "bot"],
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Telegram Bot Token",
+      "required": true
+    },
+    "MONGO_URL": {
+      "description": "MongoDB URI for database connection",
+      "required": true
+    },
+    "DB_NAME": {
+      "description": "Name of the MongoDB database (default is 'edit')",
+      "required": false
+    },
+    "OWNER_ID": {
+      "description": "Telegram User ID of the bot owner",
+      "required": true
+    },
+    "LOGGER_GROUP_ID": {
+      "description": "Telegram Group ID for logging",
+      "required": true
+    }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "Standard-1X"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
