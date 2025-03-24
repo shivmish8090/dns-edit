@@ -4,6 +4,14 @@
   "repository": "https://github.com/Rajputshivsingh65/Edit",
   "keywords": ["telegram", "bot"],
   "env": {
+   "API_ID": {
+      "description": "Your api id",
+      "required": true
+    },
+   "API_HASH": {
+      "description": "Your api hash ",
+      "required": true
+    },
     "BOT_TOKEN": {
       "description": "Telegram Bot Token",
       "required": true
@@ -11,10 +19,6 @@
     "MONGO_URL": {
       "description": "MongoDB URI for database connection",
       "required": true
-    },
-    "DB_NAME": {
-      "description": "Name of the MongoDB database (default is 'edit')",
-      "required": false
     },
     "OWNER_ID": {
       "description": "Telegram User ID of the bot owner",
@@ -28,7 +32,7 @@
   "formation": {
     "worker": {
       "quantity": 1,
-      "size": "Standard-1X"
+      "size": "basic"
     }
   },
   "buildpacks": [
