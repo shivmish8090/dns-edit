@@ -7,18 +7,8 @@ import logging
 from telethon import TelegramClient, events, Button
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from rudra.start import send_start_message
-from rudra.delete_media_edits import handle_media_edited_message
-from rudra.user import get_group_count, get_user_count, add_group, add_user
-from rudra.warn import warn_user
-from rudra.broadcast import send_broadcast_message
-from rudra.logging import log_user_activity, log_group_activity, send_thank_you_message 
-
-from rudra.delete_edits import handle_edited_message
-
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-DB_NAME = os.getenv("DB_NAME", "edit")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 MONGO_URI = os.getenv("MONGO_URL")
 OWNER_ID = int(os.getenv("OWNER_ID"))
