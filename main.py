@@ -66,6 +66,8 @@ async def get_all_groups():
 
 async def main():
     await bot.start(bot_token=BOT_TOKEN)
+    await bot.send_message(LOGGER_GROUP_ID, "Started")
+    await bot.run_until_disconnected()
 
 
 @bot.on(events.NewMessage(func = lambda e: e.text.startswith("/start") and e.is_private, incoming=True))
@@ -166,21 +168,42 @@ async def handle_broadcast(message):
     
     else:
         await event.reply("Provide a message or Reply to a message to broadcast it.")
+@bot.on(events.ChatAction(func=lambda e: e.user_kicked or e.user_added or e.user_left))
+async def handle_bot_added_to_group(event):
+    if users := await event.get_users():
+        for user in users:
+            if user.id == (await bot.get_me()).id
+                await add_group(event.chat_id) if event.user_added else await remove_group(event.chat_id)
+                chat = await event.get_chat()
+                action_emoji = "➕" if event.user_added else "➖"
+                current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                message = (
+                    f"✨ *Group Activity Log*\n"
+                    f"━━━━━━━━━━━━━━━━━━━\n"
+                    f"👥 *Group ID:* `{event.chat_id}`\n"
+                    f"🏷️ *Group Name:* {chat.title}\n"
+                    f"{action_emoji} *Action:* {'Added' if event.user_added else 'Removed'}\n"
+                    f"⏰ *Time:* `{current_time}`\n"
+                    f"📡 *Bot Status:* Active\n"
+                    f"━━━━━━━━━━━━━━━━━━━\n"
+                )
+               await bot.send_message(LOGGER_GROUP_ID, message, link_preview=False)
+               await event.reply(f"""
+**🤖 Thanks for adding me to the group {chat.title}! 🤖**
 
-@bot.my_chat_member_handler(func=lambda member: member.new_chat_member.status in ["member", "administrator"])
-def handle_bot_added_to_group(event):
-    try:
-        chat = event.chat
-        if chat.type in ["group", "supergroup"]:
-            group_id = chat.id
-            group_name = chat.title
-            user = event.from_user
-            add_group(group_id)
-            log_group_activity(group_id, group_name, "added")
-            send_thank_you_message(user, group_name, group_id)
-            logging.info(f"Bot added to group: {group_name} (ID: {group_id})")
-    except Exception as e:
-        logging.error(f"Error handling bot added to group: {e}")    
+I’m here to make your group safer and more efficient!  
+Tap the button below to explore my features.
+
+**🌟 Features:**
+- Auto Delete Edit Messages
+- Auto Delete Edit Media
+- Group Security & Monitoring
+
+🚀 Let’s make this group awesome together!  
+Need help? Just ask! 💬
+""", buttons=Button.url("Plzz Click Me", url="https://t.me/EditGuardiansBot?start=start"))
+
+                   
 
 if __name__ == "__main__":
-    bot.infinity_polling()
+    bot.loop.run_until_complete(main()
