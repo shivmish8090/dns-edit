@@ -21,7 +21,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 DB_NAME = os.getenv("DB_NAME", "edit")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 MONGO_URI = os.getenv("MONGO_URL")
-OWNER_ID = os.getenv("OWNER_ID")
+OWNER_ID = int(os.getenv("OWNER_ID"))
 LOGGER_GROUP_ID = int(os.getenv("LOGGER_GROUP_ID"))
 
 API_ID = int(os.getenv("API_ID"))
@@ -39,53 +39,30 @@ async def add_user(user_id):
         await users_collection.insert_one({"user_id": user_id})
 
 async def add_group(group_id):
-    try:
-        group_id = str(group_id)
-        if not await groups_collection.find_one({"group_id": group_id}):
-            await groups_collection.insert_one({"group_id": group_id})
-            logging.info(f"Group added to database: {group_id}")
-        else:
-            logging.info(f"Group {group_id} already exists in the database.")
-    except Exception as e:
-        logging.error(f"Error adding group to database: {e}")
+    if not await groups_collection.find_one({"group_id": group_id}):
+        await groups_collection.insert_one({"group_id": group_id}) 
 
 async def remove_group(group_id):
-    try:
-        group_id = str(group_id)
-        if await groups_collection.find_one({"group_id": group_id}):
-            await groups_collection.delete_one({"group_id": group_id})
-            await log_group_activity(group_id, action="removed")
-    except Exception as e:
-        logging.error(f"Error removing group: {e}")
-
-async def get_user_count():
-    try:
-        return await users_collection.count_documents({})
-    except Exception as e:
-        logging.error(f"Error fetching user count: {e}")
-        return 0
-
-async def get_group_count():
-    try:
-        return await groups_collection.count_documents({})
-    except Exception as e:
-        logging.error(f"Error fetching group count: {e}")
-        return 0
+    if await groups_collection.find_one({"group_id": group_id}):
+        await groups_collection.delete_one({"group_id": group_id})
 
 async def get_all_users():
-    try:
-        return [user["user_id"] async for user in users_collection.find()]
-    except Exception as e:
-        logging.error(f"Error fetching all users: {e}")
-        return []
-
+    users = []
+    async for user in users_collection.find():
+        try:
+            users.append(user["user_id"])
+        except Exception:
+            pass
+    return users
+    
 async def get_all_groups():
-    try:
-        return [group["group_id"] async for group in groups_collection.find()]
-    except Exception as e:
-        logging.error(f"Error fetching all groups: {e}")
-        return []
-
+    group = []
+    async for chat in groups_collection.find():
+        try:
+            group.append(chat["group_id"])
+        except Exception:
+            pass
+    return users    
 
 async def main():
     await bot.start(bot_token=BOT_TOKEN)
@@ -152,41 +129,43 @@ async def on_message_edited(event):
             reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴀ ᴀᴜᴅɪᴏ ꜰɪʟᴇ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
         elif message.video_note:
             reason = "ᴄʜᴀɴɢɪɴɢ ᴀ ᴠɪᴅᴇᴏ ɴᴏᴛᴇ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ."
-        elif message.voice:#
+        elif message.voice:
             reason = "ᴇᴅɪᴛɪɴɢ ᴀ ᴠᴏɪᴄᴇ ᴍᴇꜱꜱᴀɢᴇ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
-        elif message.sticker:#
+        elif message.sticker:
             reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴀ ꜱᴛɪᴄᴋᴇʀ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
         await event.respond(reason)
     except Exception:
         return
 
-@bot.message_handler(commands=["user"])
-def handle_user_count(message):
-    if str(message.from_user.id) == OWNER_ID:
-        user_count = get_user_count()
-        bot.send_message(message.chat.id, f"Total users: {user_count}")
+@bot.on(events.NewMessage(func = lambda e: e.text.startswith("/stats"), incoming=True))
+async def handle_user_count(event):
+    if event.sender_id == OWNER_ID:
+        user_count = len(await get_all_users())
+        group_count =  len(await get_all_groups())
+        await event.reply(f"Total users: {user_count}\nTotal Groups: {group_count}")
     else:
-        bot.send_message(message.chat.id, "You are not authorized to use this command.")
+        await event.reply("You are not authorized to use this command.")
 
-@bot.message_handler(commands=["group"])
-def handle_group_count(message):
-    if str(message.from_user.id) == OWNER_ID:
-        group_count = get_group_count()
-        bot.send_message(message.chat.id, f"Total groups: {group_count}")
+@bot.on(events.NewMessage(func = lambda e: e.text.startswith("/broadcast") and e.sender_id == OWNER_ID, incoming=True))
+async def handle_broadcast(message):
+    chat_ids = await get_all_users() + await get_all_groups()
+    if event.is_reply:
+        rmsg = await event.get_reply_message()
+        for chat in chat_ids:
+            try:
+                await rmsg.forward_to(chat)
+            except Exception:
+                pass
+    elif len(event.text.split()) => 2:
+        msg = event.text.replace("/broadcast", "")
+        for chat in chat_ids:
+            try:
+                await bot.send_message(chat, msg, link_preview=False)
+            except Exception:
+                pass
+    
     else:
-        bot.send_message(message.chat.id, "You are not authorized to use this command.")
-
-@bot.message_handler(commands=['broadcast'])
-def handle_broadcast(message):
-    if str(message.from_user.id) == OWNER_ID:
-        message_text = message.text[11:]
-        if message_text:
-            send_broadcast_message(message_text)
-            bot.reply_to(message, "Broadcast message sent to all users and groups!")
-        else:
-            bot.reply_to(message, "Please provide a message to broadcast.")
-    else:
-        bot.reply_to(message, "You are not authorized to use this command.")
+        await event.reply("Provide a message or Reply to a message to broadcast it.")
 
 @bot.my_chat_member_handler(func=lambda member: member.new_chat_member.status in ["member", "administrator"])
 def handle_bot_added_to_group(event):
