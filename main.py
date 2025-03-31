@@ -102,7 +102,7 @@ async def handle_start(event):
     await event.respond(start_text, buttons=buttons
 
 @bot.on(
-    events.MessageEdited(func=lambda e.is_group, incoming=True)
+    events.MessageEdited(func=lambda e: e.is_group, incoming=True)
 )                        
 async def on_message_edited(event):
     try:
