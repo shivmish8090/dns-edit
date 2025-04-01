@@ -149,7 +149,7 @@ async def handle_broadcast(message):
                 await rmsg.forward_to(chat)
             except Exception:
                 pass
-    elif len(event.text.split()) => 2:
+    elif len(event.text.split()) >= 2:
         msg = event.text.replace("/broadcast", "")
         for chat in chat_ids:
             try:
