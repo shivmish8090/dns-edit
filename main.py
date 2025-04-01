@@ -99,7 +99,7 @@ async def handle_start(event):
      Button.url("Update Group", "https://t.me/DNS_NETWORK")],
     [Button.url("Add Group", "https://t.me/EditGuardiansBot?start=start")]
     ]
-    await event.respond(start_text, buttons=buttons
+    await event.respond(start_text, buttons=buttons)
 
 @bot.on(
     events.MessageEdited(func=lambda e: e.is_group, incoming=True)
