@@ -103,29 +103,30 @@ async def handle_start(event):
 
 @bot.on(
     events.MessageEdited(func=lambda e: e.is_group, incoming=True)
-)                        
+)
 async def on_message_edited(event):
     try:
         await event.delete()
         reason = "ᴇᴅɪᴛɪɴɢ ᴍᴇꜱꜱᴀɢᴇꜱ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ ʜᴇʀᴇ."
 
-        if event.text:
+        if event.message.text:
             reason = "ᴇᴅɪᴛɪɴɢ ᴀ ᴍᴇꜱꜱᴀɢᴇ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ."
-        elif message.photo:
+        elif event.message.photo:
             reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴏʀ ᴇᴅɪᴛɪɴɢ ᴀ ᴘʜᴏᴛᴏ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
-        elif message.video:
+        elif event.message.video:
             reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴏʀ ᴇᴅɪᴛɪɴɢ ᴀ ᴠɪᴅᴇᴏ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ."
-        elif message.document:
+        elif event.message.document:
             reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴀ ᴅᴏᴄᴜᴍᴇɴᴛ ɪꜱ ʀᴇꜱᴛʀɪᴄᴛᴇᴅ."
-        elif message.audio:
+        elif event.message.audio:
             reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴀ ᴀᴜᴅɪᴏ ꜰɪʟᴇ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
-        elif message.video_note:
+        elif event.message.video_note:
             reason = "ᴄʜᴀɴɢɪɴɢ ᴀ ᴠɪᴅᴇᴏ ɴᴏᴛᴇ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ."
-        elif message.voice:
+        elif event.message.voice:
             reason = "ᴇᴅɪᴛɪɴɢ ᴀ ᴠᴏɪᴄᴇ ᴍᴇꜱꜱᴀɢᴇ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
-        elif message.sticker:
+        elif event.message.sticker:
             reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴀ ꜱᴛɪᴄᴋᴇʀ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
-        await event.respond(reason)
+
+        await event.reply(reason)
     except Exception:
         return
 
