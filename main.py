@@ -163,7 +163,7 @@ async def handle_broadcast(message):
 async def handle_bot_added_to_group(event):
     if users := await event.get_users():
         for user in users:
-            if user.id == (await bot.get_me()).id
+            if user.id == (await bot.get_me()).id:
                 await add_group(event.chat_id) if event.user_added else await remove_group(event.chat_id)
                 chat = await event.get_chat()
                 action_emoji = "➕" if event.user_added else "➖"
