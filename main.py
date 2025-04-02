@@ -159,6 +159,8 @@ async def handle_broadcast(message):
     
     else:
         await event.reply("Provide a message or Reply to a message to broadcast it.")
+
+
 @bot.on(events.ChatAction(func=lambda e: e.user_kicked or e.user_added or e.user_left))
 async def handle_bot_added_to_group(event):
     if users := await event.get_users():
@@ -178,8 +180,10 @@ async def handle_bot_added_to_group(event):
                     f"📡 *Bot Status:* Active\n"
                     f"━━━━━━━━━━━━━━━━━━━\n"
                 )
-               await bot.send_message(LOGGER_GROUP_ID, message, link_preview=False)
-               await event.reply(f"""
+                await bot.send_message(LOGGER_GROUP_ID, message, link_preview=False)
+
+                await event.reply(
+                    f"""
 **🤖 Thanks for adding me to the group {chat.title}! 🤖**
 
 I’m here to make your group safer and more efficient!  
@@ -192,8 +196,9 @@ Tap the button below to explore my features.
 
 🚀 Let’s make this group awesome together!  
 Need help? Just ask! 💬
-""", buttons=Button.url("Plzz Click Me", url="https://t.me/EditGuardiansBot?start=start"))
-
+""",
+                    buttons=Button.url("Plzz Click Me", url="https://t.me/EditGuardiansBot?start=start")
+                )
                    
 
 if __name__ == "__main__":
