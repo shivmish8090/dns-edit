@@ -62,8 +62,9 @@ async def main():
 
 @bot.on(events.NewMessage(func = lambda e: e.text.startswith("/start") and e.is_private, incoming=True))
 async def handle_start(event):
-    await add_user(user_id)
+    
     user_id = event.sender_id
+    await add_user(user_id)
     user = await event.get_sender()
     photo = None
     async for p in bot.iter_profile_photos(user, limit=1):
