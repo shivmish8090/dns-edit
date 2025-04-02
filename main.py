@@ -202,4 +202,4 @@ Need help? Just ask! 💬
                    
 
 if __name__ == "__main__":
-    bot.loop.run_until_complete(main()
+    bot.loop.run_until_complete(main())
