@@ -53,7 +53,7 @@ async def get_all_groups():
             group.append(chat["group_id"])
         except Exception:
             pass
-    return users    
+    return group    
 
 async def main():
     await bot.start(bot_token=BOT_TOKEN)
@@ -85,7 +85,7 @@ async def handle_start(event):
         f"━━━━━━━━━━━━━━━━━━━\n"
         f"💎 _Welcome to our bot!_\n"
     )
-    await tbot.send_message(LOGGER_GROUP_ID, message, file=photo)
+    await bot.send_message(LOGGER_GROUP_ID, message, file=photo)
 
     start_text = (
         f"Hello {mention} 👋, I'm your 𝗘𝗱𝗶𝘁 𝗚𝘂𝗮𝗿𝗱𝗶𝗮𝗻 𝗕𝗼𝘁, here to maintain a secure environment for our discussions.\n\n"
