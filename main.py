@@ -135,8 +135,12 @@ async def on_message_edited(event):
             what_edited = "edited sticker"
 
         reason = f"**⚠️ {mention}**, your message was deleted because it contained an **{what_edited}.**"
-
-        await event.reply(reason)
+        buttons = [
+    [Button.url("Update Channel", "https://t.me/Dns_Official_Channel"),
+     Button.url("Update Group", "https://t.me/dns_support_group")],
+    [Button.url("Add Group", "https://t.me/EditGuardiansBot?start=start")]
+    ]
+        await event.reply(reason, buttons=buttons)
     except Exception:
         return
 
