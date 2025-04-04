@@ -98,7 +98,7 @@ async def handle_start(event):
     )
     buttons = [
     [Button.url("Update Channel", "https://t.me/Dns_Official_Channel"),
-     Button.url("Update Group", "https://t.me/DNS_NETWORK")],
+     Button.url("Update Group", "https://t.me/dns_support_group")],
     [Button.url("Add Group", "https://t.me/EditGuardiansBot?start=start")]
     ]
     await event.respond(start_text, buttons=buttons)
