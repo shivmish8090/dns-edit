@@ -60,6 +60,10 @@ async def main():
     await bot.send_message(LOGGER_GROUP_ID, "Started")
     await bot.run_until_disconnected()
 
+@bot.on(events.NewMessage(func = lambda e: len(e.text) > 800 and e.is_group, incoming=True))
+async def delete_long_message(event):
+    await event.delete()
+    await event.respond("Your message is Greater then 800 characters so it was deleted")
 
 @bot.on(events.NewMessage(func = lambda e: e.text.startswith("/start") and e.is_private, incoming=True))
 async def handle_start(event):
