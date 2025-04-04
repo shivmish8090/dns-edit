@@ -108,25 +108,29 @@ async def handle_start(event):
 )
 async def on_message_edited(event):
     try:
+        mention = f"[{event.sender.first_name}](tg://user?id={event.sender_id})"
+        what_edited = "edited message"
+
         await event.delete()
-        reason = "ᴇᴅɪᴛɪɴɢ ᴍᴇꜱꜱᴀɢᴇꜱ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ ʜᴇʀᴇ."
 
         if event.message.text:
-            reason = "ᴇᴅɪᴛɪɴɢ ᴀ ᴍᴇꜱꜱᴀɢᴇ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ."
+            what_edited = "edited text message"
         elif event.message.photo:
-            reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴏʀ ᴇᴅɪᴛɪɴɢ ᴀ ᴘʜᴏᴛᴏ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
+            what_edited = "edited photo"
         elif event.message.video:
-            reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴏʀ ᴇᴅɪᴛɪɴɢ ᴀ ᴠɪᴅᴇᴏ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ."
+            what_edited = "edited video"
         elif event.message.document:
-            reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴀ ᴅᴏᴄᴜᴍᴇɴᴛ ɪꜱ ʀᴇꜱᴛʀɪᴄᴛᴇᴅ."
+            what_edited = "edited document"
         elif event.message.audio:
-            reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴀ ᴀᴜᴅɪᴏ ꜰɪʟᴇ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
+            what_edited = "edited audio file"
         elif event.message.video_note:
-            reason = "ᴄʜᴀɴɢɪɴɢ ᴀ ᴠɪᴅᴇᴏ ɴᴏᴛᴇ ɪꜱ ɴᴏᴛ ᴀʟʟᴏᴡᴇᴅ."
+            what_edited = "edited video note"
         elif event.message.voice:
-            reason = "ᴇᴅɪᴛɪɴɢ ᴀ ᴠᴏɪᴄᴇ ᴍᴇꜱꜱᴀɢᴇ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
+            what_edited = "edited voice message"
         elif event.message.sticker:
-            reason = "ʀᴇᴘʟᴀᴄɪɴɢ ᴀ ꜱᴛɪᴄᴋᴇʀ ɪꜱ ɴᴏᴛ ᴘᴇʀᴍɪᴛᴛᴇᴅ."
+            what_edited = "edited sticker"
+
+        reason = f"**⚠️ {mention}**, your message was deleted because it contained an **{what_edited}.**"
 
         await event.reply(reason)
     except Exception:
