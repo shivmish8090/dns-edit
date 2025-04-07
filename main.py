@@ -101,7 +101,7 @@ async def handle_start(event):
         "➡️ Click on 𝗔𝗱𝗱 𝗚𝗿𝗼𝘂𝗽 to add me and keep our group safe!"
     )
     buttons = [
-    [Button.url("Update Channel", "https://t.me/Dns_Official_Channel"),
+    [Button.url("Update Channel", "https://t.me/SanatanVibe"),
      Button.url("Update Group", "https://t.me/dns_support_group")],
     [Button.url("Add Group", "https://t.me/EditGuardiansBot?start=start")]
     ]
@@ -136,7 +136,7 @@ async def on_message_edited(event):
 
         reason = f"**⚠️ {mention}**, your message was deleted because it contained an **{what_edited}.**"
         buttons = [
-    [Button.url("Update Channel", "https://t.me/Dns_Official_Channel"),
+    [Button.url("Update Channel", "https://t.me/SanatanVibe"),
      Button.url("Update Group", "https://t.me/dns_support_group")],
     [Button.url("Add Group", "https://t.me/EditGuardiansBot?start=start")]
     ]
